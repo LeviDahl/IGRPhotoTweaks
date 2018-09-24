@@ -20,36 +20,21 @@ class CropTests: XCTestCase {
     let originalImageSize = CGSize(width: 100, height: 56)
     let cropImageSize = CGSize(width: 50, height: 25)
     
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-        
-        
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
-    func testImageCrop() {
+    func testImageCrop()
+    {
         let image = testImage()
         
         XCTAssertNotNil(image)
         
-        if let fixedImage = image?.cgImageWithFixedOrientation() {
-            let imageRef = fixedImage.transformedImage(CGAffineTransform.identity,
-                                                       sourceSize: originalImageSize,
-                                                       outputWidth: originalImageSize.width,
-                                                       cropSize: cropImageSize,
-                                                       imageViewSize: originalImageSize)
-            
+        if let fixedImage = image?.cgImageWithFixedOrientation(), let imageRef = fixedImage.transformedImage(CGAffineTransform.identity, sourceSize: originalImageSize, outputWidth: originalImageSize.width, cropSize: cropImageSize,  imageViewSize: originalImageSize)
+        {
             let resultImage = UIImage(cgImage: imageRef, scale: 2.0, orientation: .up)
             
             XCTAssertNotNil(resultImage, "Can't crop image")
             XCTAssert(resultImage.size.equalTo(cropImageSize), "Wrong crop size")
-            
-        } else {
+        }
+        else
+        {
             XCTAssert(false, "Can't fix Image")
         }
     }

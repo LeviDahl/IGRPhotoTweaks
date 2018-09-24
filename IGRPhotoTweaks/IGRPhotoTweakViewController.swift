@@ -14,7 +14,7 @@ public protocol IGRPhotoTweakViewControllerDelegate : class {
     /**
      Called on image cropped.
      */
-    func photoTweaksController(_ controller: IGRPhotoTweakViewController, didFinishWithCroppedImage croppedImage: UIImage)
+    func photoTweaksController(_ controller: IGRPhotoTweakViewController, didFinishWithCroppedImage croppedImage: UIImage?)
     /**
      Called on cropping image canceled
      */
@@ -121,20 +121,19 @@ open class IGRPhotoTweakViewController: UIViewController {
         let yScale: CGFloat = sqrt(t.b * t.b + t.d * t.d)
         transform = transform.scaledBy(x: xScale, y: yScale)
         
-        if let fixedImage = self.image.cgImageWithFixedOrientation() {
-            let imageRef = fixedImage.transformedImage(transform,
-                                                       sourceSize: self.image.size,
-                                                       outputWidth: self.image.size.width,
-                                                       cropSize: self.photoView.cropView.frame.size,
-                                                       imageViewSize: self.photoView.photoContentView.bounds.size)
+        if let fixedImage = self.image.cgImageWithFixedOrientation()
+        {
+            let imageRef = fixedImage.transformedImage(transform, sourceSize: self.image.size, outputWidth: self.image.size.width, cropSize: self.photoView.cropView.frame.size, imageViewSize: self.photoView.photoContentView.bounds.size)
             
-            let image = UIImage(cgImage: imageRef)
-            
-            if self.isAutoSaveToLibray {
-                
-                self.saveToLibrary(image: image)
+            var image: UIImage? = nil
+            if let imageRef = imageRef, self.isAutoSaveToLibray
+            {
+                image = UIImage(cgImage: imageRef)
+                if let image = image
+                {
+                    self.saveToLibrary(image: image)
+                }
             }
-            
             self.delegate?.photoTweaksController(self, didFinishWithCroppedImage: image)
         }
     }
