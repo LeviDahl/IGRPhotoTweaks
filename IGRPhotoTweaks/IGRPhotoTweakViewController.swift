@@ -125,8 +125,28 @@ open class IGRPhotoTweakViewController: UIViewController {
         {
             let imageRef = fixedImage.transformedImage(transform, sourceSize: self.image.size, outputWidth: self.image.size.width, cropSize: self.photoView.cropView.frame.size, imageViewSize: self.photoView.photoContentView.bounds.size)
             
+            var image: UIImage? = nil
+            if let imageRef = imageRef
+            {
+                image = UIImage(cgImage: imageRef)
+                if let image = image
+                {
+                    if self.isAutoSaveToLibray
+                    {
+                        self.saveToLibrary(image: image)
+                    }
+                    self.delegate?.photoTweaksController(self, didFinishWithCroppedImage: image)
+                }
+                else
+                {
+                    self.delegate?.photoTweaksController(self, didFinishWithCroppedImage: image)
+                }
             }
-        }
+            else
+            {
+                self.delegate?.photoTweaksController(self, didFinishWithCroppedImage: image)
+            }
+        } 
     }
     
     //MARK: - Customization
