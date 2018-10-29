@@ -48,7 +48,7 @@ extension IGRPhotoTweakViewController
                         ac.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                         ac.addAction(UIAlertAction(title: "Settings", style: .default)
                         { _ in
-                            guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString), UIApplication.shared.canOpenURL(settingsUrl) else { return }
+                            guard let settingsUrl = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(settingsUrl) else { return }
                             if #available(iOS 10.0, *)
                             {
                                 UIApplication.shared.open(settingsUrl)
